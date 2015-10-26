@@ -31,6 +31,10 @@ All settings can be provided as attributes in the `<uib-timepicker>` or globally
  	_(Defaults: false)_ :
  	 Whether user can type inside the hours & minutes input.
 
+ * `current-time`
+ 	_(Defaults: function() { new Date(); } )_ :
+ 	Function that TimePicker calls when requires the current time. Can be replaced to allow the application simulate work in different time as if it were today.	
+
  * `mousewheel`
     _(Defaults: true)_ :
      Whether user can scroll inside the hours & minutes input to increase or decrease it's values.
