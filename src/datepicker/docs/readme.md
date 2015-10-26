@@ -37,6 +37,10 @@ All settings can be provided as attributes in the `uib-datepicker` or globally c
  	_(Defaults: true)_ :
  	Whether to display week numbers.
 
+ * `current-date`
+ 	_(Defaults: function() { new Date(); } )_ :
+ 	Function that DatePicker calls when requires the current date (to highlight current date in calendar for example). Can be replaced to allow the application simulate work in different time as if it were today.	
+
  * `starting-day`
  	_(Defaults: 0)_ :
  	Starting day of the week from 0-6 (0=Sunday, ..., 6=Saturday).

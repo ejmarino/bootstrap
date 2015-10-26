@@ -17,7 +17,8 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   yearRange: 20,
   minDate: null,
   maxDate: null,
-  shortcutPropagation: false
+  shortcutPropagation: false,
+  currentDate: function() { return new Date(); }
 })
 
 .controller('UibDatepickerController', ['$scope', '$attrs', '$parse', '$interpolate', '$log', 'dateFilter', 'uibDatepickerConfig', '$datepickerSuppressError', function($scope, $attrs, $parse, $interpolate, $log, dateFilter, datepickerConfig, $datepickerSuppressError) {
@@ -64,7 +65,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   $scope.uniqueId = 'datepicker-' + $scope.$id + '-' + Math.floor(Math.random() * 10000);
 
   if (angular.isDefined($attrs.initDate)) {
-    this.activeDate = $scope.$parent.$eval($attrs.initDate) || new Date();
+    this.activeDate = $scope.$parent.$eval($attrs.initDate) || datepickerConfig.currentDate();
     $scope.$parent.$watch($attrs.initDate, function(initDate) {
       if (initDate && (ngModelCtrl.$isEmpty(ngModelCtrl.$modelValue) || ngModelCtrl.$invalid)) {
         self.activeDate = initDate;
@@ -72,7 +73,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
       }
     });
   } else {
-    this.activeDate = new Date();
+    this.activeDate = datepickerConfig.currentDate();
   }
 
   $scope.isActive = function(dateObject) {
@@ -121,7 +122,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
       label: dateFilter(date, format),
       selected: model && this.compare(date, model) === 0,
       disabled: this.isDisabled(date),
-      current: this.compare(date, new Date()) === 0,
+      current: this.compare(date, datepickerConfig.currentDate()) === 0,
       customClass: this.customClass(date)
     };
   };
@@ -516,8 +517,8 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   onOpenFocus: true
 })
 
-.controller('UibDatepickerPopupController', ['$scope', '$element', '$attrs', '$compile', '$parse', '$document', '$rootScope', '$uibPosition', 'dateFilter', 'uibDateParser', 'uibDatepickerPopupConfig', '$timeout',
-function(scope, element, attrs, $compile, $parse, $document, $rootScope, $position, dateFilter, dateParser, datepickerPopupConfig, $timeout) {
+.controller('UibDatepickerPopupController', ['$scope', '$element', '$attrs', '$compile', '$parse', '$document', '$rootScope', '$uibPosition', 'dateFilter', 'uibDateParser', 'uibDatepickerConfig', 'uibDatepickerPopupConfig', '$timeout',
+function(scope, element, attrs, $compile, $parse, $document, $rootScope, $position, dateFilter, dateParser, datepickerConfig, datepickerPopupConfig, $timeout) {
   var self = this;
   var cache = {},
     isHtml5DateInput = false;
@@ -684,7 +685,7 @@ function(scope, element, attrs, $compile, $parse, $document, $rootScope, $positi
 
   scope.isDisabled = function(date) {
     if (date === 'today') {
-      date = new Date();
+      date = datepickerConfig.currentDate();
     }
 
     return ((scope.watchData.minDate && scope.compare(date, cache.minDate) < 0) ||
@@ -719,7 +720,7 @@ function(scope, element, attrs, $compile, $parse, $document, $rootScope, $positi
 
   scope.select = function(date) {
     if (date === 'today') {
-      var today = new Date();
+      var today = datepickerConfig.currentDate();
       if (angular.isDate(scope.date)) {
         date = new Date(scope.date);
         date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
